@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {makeStyles} from '@material-ui/core/styles'
-import {Typography, Drawer, Divider, List, ListItem, ListItemText, IconButton} from '@material-ui/core'
+import {Paper, Typography, Drawer, Divider, List, ListItem, ListItemText, IconButton} from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
@@ -11,7 +11,7 @@ const useStyles = makeStyles( theme => ({
     titleBar:{
         display: 'flex',
         flexDirection: 'row',
-        justifyContent:'center'
+        justifyContent:'center',
     },
     iconWrapper:{
         display: 'flex',
@@ -23,6 +23,10 @@ const useStyles = makeStyles( theme => ({
         flexGrow: 1
     },
     icon:{
+        padding: theme.spacing(2),
+        "&:hover":{
+            color: 'gray'
+        },
         transform: 'scale(1.5)'
     }
 }))
@@ -33,11 +37,12 @@ export default function Header(){
     return(
         <>
             <div className={classes.root}>
+                <Paper elevation={3}>
                 <div className={classes.titleBar}>
                     <div className={classes.iconWrapper}>
-                        <IconButton className={classes.icon} onClick={()=> setDrawerOpen(true)}>
+                        <div className={classes.icon} onClick={()=> setDrawerOpen(true)}>
                             <MenuIcon />
-                        </IconButton>
+                        </div>
                     </div>
                     <div className={classes.headingWrapper}>
                         <Typography variant='h1'>
@@ -45,6 +50,7 @@ export default function Header(){
                         </Typography>
                     </div>
                 </div>
+                </Paper>
             </div>
             <Drawer
                 className={classes.drawer}

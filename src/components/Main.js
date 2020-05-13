@@ -45,11 +45,13 @@ export default function Main() {
     const classes = useStyles()
     const [quote, setQuote] = useState("No quote")
     const [author, setAuthor] = useState("Unknown")
+    const [img, setImg] = useState("No img")
     
     useEffect(()=>{
         qod().then(res=>{
             setQuote(res.quote)
             setAuthor(res.author)
+            setImg(res.img)
             })
             .catch(msg => console.log(msg))
     })
@@ -68,6 +70,9 @@ export default function Main() {
                             <div className={classes.authorName}>
                                 <Typography>- {author}</Typography>
                             </div>
+                        </div>
+                        <div>
+                            <img src={img}></img>
                         </div>
                     </div>
                 </div>

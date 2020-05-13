@@ -8,10 +8,11 @@ const api = {
 export default async function qod(){
     try{
         const {data} = await axios.get(new URL(api.qod, domain))
+        console.log(data)
         return {
             quote: data.contents.quotes[0].quote,
             author: data.contents.quotes[0].author,
-            img: data.contents.quotes[0].image
+            img: data.contents.quotes[0].background
         }
     }
     catch(err){
