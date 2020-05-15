@@ -1,8 +1,12 @@
-import React, {useState, useEffect} from 'react'
+/* eslint-disable jsx-a11y/alt-text */
+import React from 'react'
 import {makeStyles} from '@material-ui/core/styles'
 import {Paper, Typography} from '@material-ui/core'
-import qod from '../api'
+import {fetchQOD, fetchRandom} from '../api'
+import { useQuery } from 'react-query'
 import  Header from './Header'
+import ProgressBar from './common/ProgressBar'
+import ErrorPage from "./common/ErrorPage"
 
 const useStyles = makeStyles( theme => ({
     root:{
@@ -20,7 +24,9 @@ const useStyles = makeStyles( theme => ({
         display: 'flex',
         justifyContent:"center",
         flexDirection: "row",
-        flexGrow: 1
+        flexGrow: 1,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover'
     },
     quoteWrapper:{
         display: 'flex',
@@ -38,44 +44,52 @@ const useStyles = makeStyles( theme => ({
     },
     authorName: {
         fontStyle: 'italic'
-    }
+    },
 }))
 
+const getBackgroundStyle = img => {
+    if(img){
+        return {
+            backgroundImage: `url(${img})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover'
+        }
+    }
+}
+
 export default function Main() {
-    const classes = useStyles()
-    const [quote, setQuote] = useState("No quote")
-    const [author, setAuthor] = useState("Unknown")
-    const [img, setImg] = useState("No img")
+    let {status, data, error} = useQuery('qod', fetchRandom, {staleTime: Infinity});
+    const classes = useStyles();
     
-    useEffect(()=>{
-        qod().then(res=>{
-            setQuote(res.quote)
-            setAuthor(res.author)
-            setImg(res.img)
-            })
-            .catch(msg => console.log(msg))
-    })
     return(
         <div className={classes.root}>
-            <div><Header /></div>
-            <div className={classes.bodyWrapper}>
-                <div className={classes.body}>
-                    <div className={classes.quoteWrapper}>
-                        <div className={classes.quote}>
-                            <Paper elevation={3}>
-                                {quote}
-                            </Paper>
-                        </div>
-                        <div className={classes.authorWrapper}>
-                            <div className={classes.authorName}>
-                                <Typography>- {author}</Typography>
+            <div><Header update={ newInfo => ({status, data, error} = newInfo) }/></div>
+            <div className={classes.bodyWrapper} >
+                { status === 'loading' && 
+                    <ProgressBar />
+                }
+                { status === 'error' &&
+                    <ErrorPage msg={error.message}/>
+                }
+                { status === 'success' &&
+                    <div id="content" className={classes.body} style={getBackgroundStyle(data.img)}>
+                        <div className={classes.quoteWrapper}>
+                            <div className={classes.quote}>
+                                <Paper elevation={3}>
+                                    {data.quote}
+                                </Paper>
+                            </div>
+                            <div className={classes.authorWrapper}>
+                                <div className={classes.authorName}>
+                                    <Paper elevation={3}>
+                                        <Typography>- {data.author}</Typography>
+                                    </Paper>
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <img src={img}></img>
-                        </div>
                     </div>
-                </div>
+                }
+
             </div>
         </div>
     )

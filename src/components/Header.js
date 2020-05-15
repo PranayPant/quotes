@@ -1,8 +1,8 @@
-import React, {useState} from 'react'
-import {makeStyles} from '@material-ui/core/styles'
-import {Paper, Typography, Drawer, Divider, List, ListItem, ListItemText, IconButton} from '@material-ui/core'
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import React from 'react'
+import {makeStyles, withStyles} from '@material-ui/core/styles'
+import {Paper, Typography, Button} from '@material-ui/core'
+import {fetchRandom} from '../api'
+import {queryCache} from 'react-query'
 
 const useStyles = makeStyles( theme => ({
     root:{
@@ -12,6 +12,8 @@ const useStyles = makeStyles( theme => ({
         display: 'flex',
         flexDirection: 'row',
         justifyContent:'center',
+        padding: theme.spacing(2),
+        backgroundColor: "#fbf8f1"
     },
     iconWrapper:{
         display: 'flex',
@@ -20,58 +22,74 @@ const useStyles = makeStyles( theme => ({
         fontSize: 50
     },
     headingWrapper:{
+        flexGrow: 0,
+        padding: theme.spacing(2)
+    },
+    menuWrapper:{
         flexGrow: 1
     },
-    icon:{
-        padding: theme.spacing(2),
-        "&:hover":{
-            color: 'gray'
-        },
-        transform: 'scale(1.5)'
+    randomButtonWrapper:{
+        padding: theme.spacing(3)
     }
 }))
 
+const RandomButton = withStyles({
+    root: {
+        boxShadow: 'none',
+        textTransform: 'none',
+        fontSize: 16,
+        padding: '6px 12px',
+        border: '1px solid',
+        lineHeight: 1.5,
+        backgroundColor: '#228B22',
+        borderColor: '#006400',
+        fontFamily: [
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"Segoe UI"',
+          'Roboto',
+          '"Helvetica Neue"',
+          'Arial',
+          'sans-serif',
+          '"Apple Color Emoji"',
+          '"Segoe UI Emoji"',
+          '"Segoe UI Symbol"',
+        ].join(','),
+        '&:hover': {
+          backgroundColor: '#008000',
+          borderColor: '#006400',
+          boxShadow: 'none',
+        },
+        '&:active': {
+          boxShadow: 'none',
+          backgroundColor: '#0062cc',
+          borderColor: '#006400',
+        },
+      },
+})(Button)
+
 export default function Header(){
     const classes = useStyles()
-    const [drawerOpen, setDrawerOpen] = useState(false)
     return(
         <>
             <div className={classes.root}>
                 <Paper elevation={3}>
-                <div className={classes.titleBar}>
-                    <div className={classes.iconWrapper}>
-                        <div className={classes.icon} onClick={()=> setDrawerOpen(true)}>
-                            <MenuIcon />
+                    <div className={classes.titleBar}>
+                        <div className={classes.headingWrapper}>
+                            <Typography variant='h3'>
+                                Quotes
+                            </Typography>
+                        </div>
+                        <div className={classes.menuWrapper}>
+                            <div className={classes.randomButtonWrapper} onClick={()=> queryCache.refetchQueries( 'qod')}>
+                                <RandomButton variant="contained" color="primary" >
+                                    Generate Random Quote!
+                                </RandomButton>
+                            </div>
                         </div>
                     </div>
-                    <div className={classes.headingWrapper}>
-                        <Typography variant='h1'>
-                            Quotes
-                        </Typography>
-                    </div>
-                </div>
                 </Paper>
             </div>
-            <Drawer
-                className={classes.drawer}
-                variant="persistent"
-                anchor="left"
-                open={drawerOpen}
-            >
-                <div className={classes.drawerHeader}>
-                    <IconButton onClick={() => setDrawerOpen(false)}>
-                        <ChevronRightIcon />
-                    </IconButton>
-                </div>
-                <Divider />
-                <List>
-                    {['Categories', 'Authors', 'Popular'].map((text, index) => (
-                        <ListItem button key={text}>
-                        <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
-                </List>
-            </Drawer>
         </>
     )
 }
