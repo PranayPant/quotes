@@ -1,8 +1,6 @@
 import React from 'react'
-import {makeStyles, withStyles} from '@material-ui/core/styles'
-import {Paper, Typography, Button} from '@material-ui/core'
-import {fetchRandom} from '../api'
-import {queryCache} from 'react-query'
+import {makeStyles} from '@material-ui/core/styles'
+import {Paper, Typography} from '@material-ui/core'
 
 const useStyles = makeStyles( theme => ({
     root:{
@@ -33,42 +31,7 @@ const useStyles = makeStyles( theme => ({
     }
 }))
 
-const RandomButton = withStyles({
-    root: {
-        boxShadow: 'none',
-        textTransform: 'none',
-        fontSize: 16,
-        padding: '6px 12px',
-        border: '1px solid',
-        lineHeight: 1.5,
-        backgroundColor: '#228B22',
-        borderColor: '#006400',
-        fontFamily: [
-          '-apple-system',
-          'BlinkMacSystemFont',
-          '"Segoe UI"',
-          'Roboto',
-          '"Helvetica Neue"',
-          'Arial',
-          'sans-serif',
-          '"Apple Color Emoji"',
-          '"Segoe UI Emoji"',
-          '"Segoe UI Symbol"',
-        ].join(','),
-        '&:hover': {
-          backgroundColor: '#008000',
-          borderColor: '#006400',
-          boxShadow: 'none',
-        },
-        '&:active': {
-          boxShadow: 'none',
-          backgroundColor: '#0062cc',
-          borderColor: '#006400',
-        },
-      },
-})(Button)
-
-export default function Header(){
+export default function Header({children}){
     const classes = useStyles()
     return(
         <>
@@ -81,10 +44,8 @@ export default function Header(){
                             </Typography>
                         </div>
                         <div className={classes.menuWrapper}>
-                            <div className={classes.randomButtonWrapper} onClick={()=> queryCache.refetchQueries( 'qod')}>
-                                <RandomButton variant="contained" color="primary" >
-                                    Generate Random Quote!
-                                </RandomButton>
+                            <div className={classes.randomButtonWrapper} >
+                                {children}
                             </div>
                         </div>
                     </div>

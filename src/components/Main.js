@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react'
-import {makeStyles} from '@material-ui/core/styles'
-import {Paper, Typography} from '@material-ui/core'
-import {fetchQOD, fetchRandom} from '../api'
-import { useQuery } from 'react-query'
+import {makeStyles, withStyles} from '@material-ui/core/styles'
+import {Paper, Typography, Button} from '@material-ui/core'
+import {fetchRandom} from '../api'
+import { useQuery, queryCache } from 'react-query'
 import  Header from './Header'
 import ProgressBar from './common/ProgressBar'
 import ErrorPage from "./common/ErrorPage"
@@ -47,6 +47,7 @@ const useStyles = makeStyles( theme => ({
     },
 }))
 
+
 const getBackgroundStyle = img => {
     if(img){
         return {
@@ -57,13 +58,59 @@ const getBackgroundStyle = img => {
     }
 }
 
+const RandomButton = withStyles({
+    root: {
+        boxShadow: 'none',
+        textTransform: 'none',
+        fontSize: 16,
+        padding: '6px 12px',
+        border: '1px solid',
+        lineHeight: 1.5,
+        backgroundColor: '#228B22',
+        borderColor: '#006400',
+        fontFamily: [
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"Segoe UI"',
+          'Roboto',
+          '"Helvetica Neue"',
+          'Arial',
+          'sans-serif',
+          '"Apple Color Emoji"',
+          '"Segoe UI Emoji"',
+          '"Segoe UI Symbol"',
+        ].join(','),
+        '&:hover': {
+          backgroundColor: '#008000',
+          borderColor: '#006400',
+          boxShadow: 'none',
+        },
+        '&:active': {
+          boxShadow: 'none',
+          backgroundColor: '#0062cc',
+          borderColor: '#006400',
+        },
+      },
+})(Button)
+
 export default function Main() {
-    let {status, data, error} = useQuery('qod', fetchRandom, {staleTime: Infinity});
     const classes = useStyles();
-    
+    const queryKey = 'qod'
+    const {status, data, error} = useQuery(queryKey, fetchRandom, {staleTime: Infinity});
+    const updateRandomQuote = () => {
+        queryCache.refetchQueries(queryKey, {force: true})
+    }
     return(
         <div className={classes.root}>
-            <div><Header update={ newInfo => ({status, data, error} = newInfo) }/></div>
+            <div>
+                <Header>
+                    <div onClick={updateRandomQuote}>
+                        <RandomButton variant="contained" color="primary" >
+                            Generate Random Quote!
+                        </RandomButton>
+                    </div>
+                </Header>
+            </div>
             <div className={classes.bodyWrapper} >
                 { status === 'loading' && 
                     <ProgressBar />
