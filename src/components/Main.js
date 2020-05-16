@@ -2,8 +2,8 @@
 import React from 'react'
 import {makeStyles, withStyles} from '@material-ui/core/styles'
 import {Paper, Typography, Button} from '@material-ui/core'
-import {fetchRandom} from '../api'
-import { useQuery, queryCache } from 'react-query'
+import {fetchQOD, fetchRandom} from '../api'
+import { useQuery, queryCache, useMutation } from 'react-query'
 import  Header from './Header'
 import ProgressBar from './common/ProgressBar'
 import ErrorPage from "./common/ErrorPage"
@@ -96,21 +96,19 @@ const RandomButton = withStyles({
 export default function Main() {
     const classes = useStyles();
     const queryKey = 'qod'
-    const {status, data, error} = useQuery(queryKey, fetchRandom, {staleTime: Infinity});
-    const updateRandomQuote = () => {
-        queryCache.refetchQueries(queryKey, {force: true})
-    }
+    const {status, data, error} = useQuery(queryKey, fetchQOD, {staleTime: Infinity});
+    const [mutateQuote] = useMutation( fetchRandom, {
+        onSuccess: data => queryCache.setQueryData(queryKey, data),
+    } )
     return(
         <div className={classes.root}>
-            <div>
-                <Header>
-                    <div onClick={updateRandomQuote}>
-                        <RandomButton variant="contained" color="primary" >
-                            Generate Random Quote!
-                        </RandomButton>
-                    </div>
-                </Header>
-            </div>
+            <Header>
+                <div onClick={mutateQuote}>
+                    <RandomButton variant="contained" color="primary" >
+                        Generate Random Quote!
+                    </RandomButton>
+                </div>
+            </Header>
             <div className={classes.bodyWrapper} >
                 { status === 'loading' && 
                     <ProgressBar />
