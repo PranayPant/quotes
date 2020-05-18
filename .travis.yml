@@ -1,0 +1,8 @@
+sudo: required
+services:
+    - docker
+before_install:
+    - docker build -t ppant/quotes -f Dockerfile.dev .
+
+scripts:
+    - docker run -e CI=true ppant/quotes npm run test
