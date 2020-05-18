@@ -1,18 +1,18 @@
 
 # Build phase 
-FROM node:alpine as build
+FROM node:alpine
 
 WORKDIR /app
 
-COPY ./package.json .
+COPY ./package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY ./ ./
 
 RUN npm run build
 
 # Start phase
 FROM nginx
 EXPOSE 80
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=0 /app/build /usr/share/nginx/html
