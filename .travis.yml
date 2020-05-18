@@ -6,3 +6,16 @@ before_install:
 
 scripts:
     - docker run -e CI=true ppant/quotes npm run test -- --coverage
+
+deploy:
+    provider: elasticbeanstalk
+    region: us-east-2
+    app: quotes
+    env: Quotes-env
+    bucket_name: elasticbeanstalk-us-east-2-963663822703
+    bucket_path: quotes
+    on:
+        branch: master
+    access_key: $AWS_ACCESS_KEY
+    secret_access_key:
+        secure: "$AWS_SECRET_KEY"
