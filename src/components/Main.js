@@ -7,6 +7,7 @@ import { useQuery, queryCache, useMutation } from 'react-query'
 import  Header from './Header'
 import ProgressBar from './common/ProgressBar'
 import ErrorPage from "./common/ErrorPage"
+import Reaction from "./common/Reaction"
 
 const useStyles = makeStyles( theme => ({
     root:{
@@ -37,14 +38,24 @@ const useStyles = makeStyles( theme => ({
         padding: theme.spacing(2),
         fontSize: 22
     },
-    authorWrapper:{
+    infoWrapper:{
         padding: theme.spacing(2),
         display: 'flex',
         justifyContent: 'flex-end'
     },
     authorName: {
-        fontStyle: 'italic'
+        fontStyle: 'italic',
+        order: '2',
+        padding: theme.spacing(2)
     },
+    emojiWrapper: {
+        order: '1',
+        padding: theme.spacing(2),
+        display: 'flex'
+    },
+    reaction:{
+        marginRight: theme.spacing(1),
+    }
 }))
 
 
@@ -124,11 +135,22 @@ export default function Main() {
                                     {data.quote}
                                 </Paper>
                             </div>
-                            <div className={classes.authorWrapper}>
+                            <div className={classes.infoWrapper}>
                                 <div className={classes.authorName}>
                                     <Paper elevation={3}>
                                         <Typography>- {data.author}</Typography>
                                     </Paper>
+                                </div>
+                                <div className={classes.emojiWrapper}>
+                                    {
+                                        ['heart_eyes', 'grinning', 'joy', 'thinking_face', 'expressionless'].map( (reaction, key) => {
+                                            return (
+                                                <div key={key} className={classes.reaction} >
+                                                    <Reaction emoji={reaction} />
+                                                </div>
+                                            )
+                                        })
+                                    }      
                                 </div>
                             </div>
                         </div>

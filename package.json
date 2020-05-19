@@ -9,6 +9,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
+    "emoji-mart": "^3.0.0",
     "react": "next",
     "react-dom": "next",
     "react-query": "^1.4.3",
