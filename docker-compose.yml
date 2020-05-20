@@ -1,12 +1,14 @@
 version: "3"
 services:
+    redis:
+        image: redis
     react-app:
         build:
             context: .
             dockerfile: Dockerfile.dev
         ports:
             - "3000:3000"
-            volumes:
-                - /app/node_modules
-                - .:/app
+        volumes:
+            - /app/node_modules
+            - .:/app
         stdin_open: true

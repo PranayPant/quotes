@@ -54,20 +54,9 @@ const useStyles = makeStyles( theme => ({
         display: 'flex'
     },
     reaction:{
-        marginRight: theme.spacing(1),
+        marginRight: theme.spacing(2),
     }
 }))
-
-
-const getBackgroundStyle = img => {
-    if(img){
-        return {
-            backgroundImage: `url(${img})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover'
-        }
-    }
-}
 
 const RandomButton = withStyles({
     root: {
@@ -128,7 +117,7 @@ export default function Main() {
                     <ErrorPage msg={error.message}/>
                 }
                 { status === 'success' &&
-                    <div id="content" className={classes.body} style={getBackgroundStyle(data.img)}>
+                    <div id="content" className={classes.body} >
                         <div className={classes.quoteWrapper}>
                             <div className={classes.quote}>
                                 <Paper elevation={3}>
