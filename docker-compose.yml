@@ -2,13 +2,19 @@ version: "3"
 services:
     redis:
         image: redis
+    backend:
+        build:
+            context: ./server
+        ports:
+            - "3001:3001"
+        volumes:
+            - ./server:/app
     react-app:
         build:
-            context: .
+            context: ./client
             dockerfile: Dockerfile.dev
         ports:
             - "3000:3000"
-            - "3001:3001"
         volumes:
-            - .:/app
+            - ./client:/app
         stdin_open: true

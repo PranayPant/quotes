@@ -20,15 +20,15 @@
   },
   "scripts": {
     "client": "react-scripts start",
-    "server": "node src/server/index.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start": "node ./node_modules/concurrently/bin/concurrently.js --kill-others \"npm run server\" \"npm run client\""
+    "start": "npm run client"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
+  "proxy": "http://backend:3001",
   "browserslist": {
     "production": [
       ">0.2%",

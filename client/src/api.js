@@ -3,9 +3,11 @@ import axios from 'axios'
 const domain = "https://quotes.rest"
 const api = {
     qod: "/qod",
-    categories: "/qod/categories"
+    categories: "/qod/categories",
 }
 const randomAPI = "http://quotes.stormconsultancy.co.uk/random.json"
+
+const clicksAPI = "/api/click"
 
 export async function fetchQOD(){
     try{
@@ -37,6 +39,18 @@ export async function fetchRandom(){
         return {
             quote: data.quote,
             author: data.author,
+        }
+    }
+    catch(err){
+        throw err
+    }
+}
+
+export async function fetchClicks(){
+    try{
+        const {data} = await axios.get(clicksAPI)
+        return {
+            clicks: data.clicks
         }
     }
     catch(err){
